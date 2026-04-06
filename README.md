@@ -22,7 +22,7 @@
 |---|---|
 | SQLite + SQLAlchemy ORM | 後述の比較検討を参照 |
 | uv | 後述の比較検討を参照 |
-| TailwindCSS + shadcn/ui | 要件は「最小限のフロントエンド」。習熟済みのため実装コストが最小で済み、その分をバックエンド設計に充てられる |
+| TailwindCSS + Radix UI | 要件は「最小限のフロントエンド」。習熟済みのため実装コストが最小で済み、その分をバックエンド設計に充てられる。削除確認ダイアログは `@radix-ui/react-dialog` を直接使用 |
 | TanStack Query | 後述の比較検討を参照 |
 
 ---
@@ -202,8 +202,8 @@ curl http://localhost:8000/tasks?status=pending
 ### 方法 1: Docker（推奨）
 
 ```bash
-git clone <repository-url>
-cd todo-app
+git clone https://github.com/moyashi0060/todo_app.git
+cd todo_app
 docker-compose up --build
 ```
 
@@ -242,7 +242,7 @@ npm run dev
 ## プロジェクト構成
 
 ```
-todo-app/
+todo_app/
 ├── backend/
 │   ├── app/
 │   │   ├── main.py              # FastAPI アプリ本体・CORS 設定
@@ -265,7 +265,6 @@ todo-app/
 │   │   ├── hooks/
 │   │   │   └── useTasks.ts      # useQuery / useMutation を集約
 │   │   ├── components/
-│   │   │   ├── ui/              # shadcn/ui 自動生成コンポーネント
 │   │   │   ├── TaskList.tsx
 │   │   │   ├── TaskForm.tsx
 │   │   │   ├── TaskFilter.tsx
