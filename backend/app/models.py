@@ -16,8 +16,10 @@ class Task(Base):
     title: Mapped[str] = mapped_column(String(200), nullable=False)
     # タスク詳細（任意）
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
-    # 完了状態（必須、既定値は未完了）
-    is_completed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    # 完了状態（必須、既定値は未完了、検索効率化のためインデックス付与）
+    is_completed: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False, index=True
+    )
     # 作成日時（UTC現在時刻を既定値として設定）
     created_at: Mapped[datetime] = mapped_column(
         DateTime,

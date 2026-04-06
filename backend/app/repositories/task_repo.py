@@ -1,9 +1,14 @@
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import asc, select
 from sqlalchemy.orm import Session
 
 from ..models import Task
+
+# 更新可能なフィールドを定義
+_ALLOWED_FIELDS: frozenset[str] = frozenset(
+    {"title", "description", "is_completed"}
+)
 
 
 # Taskテーブルに対するデータアクセスを担当するリポジトリ
@@ -13,8 +18,8 @@ class TaskRepository:
         self.db: Session = db
 
     def get_all(self, status: str) -> list[Task]:
-        # ステータス条件に応じて取得クエリを組み立てる
-        stmt = select(Task)
+        # ステータス条件に応じて取得クエリを組み立てる（作成日時順でソート）
+        stmt = select(Task).order_by(asc(Task.created_at))
         if status == "completed":
             stmt = stmt.where(Task.is_completed.is_(True))
         elif status == "pending":
@@ -34,13 +39,11 @@ class TaskRepository:
         self.db.refresh(task)
         return task
 
-    def update(
-        self,
-        task: Task,
-        **fields: Any,
-    ) -> Task:
+    def update(self, task: Task, **fields: Any) -> Task:
         # 渡されたフィールドのみを動的に更新する
         for key, value in fields.items():
+            if key not in _ALLOWED_FIELDS:
+                raise ValueError(f"不正なフィールドです: {key}")
             setattr(task, key, value)
 
         self.db.commit()
